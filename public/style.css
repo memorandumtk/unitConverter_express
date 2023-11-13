@@ -5,3 +5,7 @@ code {
 section, header {
     margin: 50px;
 }
+
+body{
+    background-color: beige;
+}

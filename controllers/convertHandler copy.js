@@ -5,11 +5,9 @@ function ConvertHandler() {
 
   this.getNum = function (input) {
     const regNum = /^^((\d+(\.\d+)?)(\/(\d+(\.\d+)?))?)(([a-z]+)?)$|^(\w+)$/gi
-    const numArray = regNum.exec(input);
+    const numArray = regNum.exec(queryInput);
     if (!numArray) {
       num = false;
-    } else if (numArray[9]) {
-      num = 1;
     } else if (numArray[4]) {
       num = numArray[2] / numArray[5]
     } else if (numArray[1]) {
@@ -19,8 +17,8 @@ function ConvertHandler() {
     }
 
     let result;
-    if (num) {
-      result = parseFloat(num);
+    if (input) {
+      result = parseFloat(input);
     } else {
       result = false;
     }
@@ -28,23 +26,23 @@ function ConvertHandler() {
   };
 
   this.getUnit = function (input) {
-    const reg = /^^((\d+(\.\d+)?)(\/(\d+(\.\d+)?))?)(([a-z]+)?)$|^(\w+)$/gi
-    const unitArray = reg.exec(input);
-    if (!unitArray) {
-      unit = input;
-    } else if (unitArray[8]) {
-      unit = unitArray[8];
-    } else if (unitArray[9]) {
-      unit = unitArray[9];
+    const regNum = /^^((\d+(\.\d+)?)(\/(\d+(\.\d+)?))?)(([a-z]+)?)$|^(\w+)$/gi
+    const numArray = regNum.exec(queryInput);
+    if (!numArray) {
+      unit = queryInput;
+    } else if (numArray[8]) {
+      unit = numArray[8];
+    } else if (numArray[9]) {
+      unit = numArray[9];
+      num = 1;
     } else {
       unit = false;
     }
-
     let result;
     const regOnlyUnit = /^((gal|km|mi|kg|lbs)|(l))$/gi;
     const regOnlyUnit2 = /((gal|km|mi|kg|lbs)|(l))$/gi;
-    const regedInput = regOnlyUnit.exec(unit);
-    const regedInput2 = regOnlyUnit2.exec(unit);
+    const regedInput = regOnlyUnit.exec(input);
+    const regedInput2 = regOnlyUnit2.exec(input);
     if (!regedInput) {
       result = false;
       if (regedInput2) {

@@ -2,7 +2,6 @@
 const expect = require('chai').expect;
 const { default: next } = require('next');
 const ConvertHandler = require('../controllers/convertHandler.js');
-const { query } = require('express');
 
 module.exports = function (app) {
 
@@ -10,16 +9,38 @@ module.exports = function (app) {
 
   app.route('/api/convert')
     .get(function (req, res, next) {
-      // let num, unit;
-      let initNum, initUnit;
+      let num, unit;
       const queryInput = req.query.input;
       console.log('this is query input >> ' + queryInput)
-      initNum = convertHandler.getNum(queryInput);
-      initUnit = convertHandler.getUnit(queryInput);
+      const regNum = /^^((\d+(\.\d+)?)(\/(\d+(\.\d+)?))?)(([a-z]+)?)$|^(\w+)$/gi
+      const numArray = regNum.exec(queryInput);
+      if (!numArray) {
+        num = false;
+      } else if (numArray[4]) {
+        num = numArray[2] / numArray[5]
+      } else if (numArray[1]) {
+        num = numArray[1]
+      } else {
+        num = false;
+      }
+
+      if (!numArray) {
+        unit = queryInput;
+      } else if (numArray[8]) {
+        unit = numArray[8];
+      } else if (numArray[9]) {
+        unit = numArray[9];
+        num = 1;
+      } else {
+        unit = false;
+      }
+      console.log('it is num ', num, ' and unit ', unit)
 
       // Modifing Proccess
-      let returnNum, returnUnit, returnString, returnJson;
+      let initNum, initUnit, returnNum, returnUnit, returnString, returnJson;
       let spelledOutUnit = [];
+      initNum = convertHandler.getNum(num);
+      initUnit = convertHandler.getUnit(unit);
       if (initUnit && initNum) {
         returnUnit = convertHandler.getReturnUnit(initUnit);
         returnNum = convertHandler.getReturnNum(
@@ -51,6 +72,6 @@ module.exports = function (app) {
       }
       //Send JSON
       console.log('this is returnString >> ' + returnString)
-      res.send(returnJson)
+      res.json(returnJson)
     })
 };
