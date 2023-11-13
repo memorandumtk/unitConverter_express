@@ -10,16 +10,16 @@ module.exports = function (app) {
 
   app.route('/api/convert')
     .get(function (req, res, next) {
-      // let num, unit;
       let initNum, initUnit;
       const queryInput = req.query.input;
       console.log('this is query input >> ' + queryInput)
+      // taking initNum and initUnit using controller
       initNum = convertHandler.getNum(queryInput);
       initUnit = convertHandler.getUnit(queryInput);
 
-      // Modifing Proccess
       let returnNum, returnUnit, returnString, returnJson;
       let spelledOutUnit = [];
+      // in case initUnit and initNum are entered correctly
       if (initUnit && initNum) {
         returnUnit = convertHandler.getReturnUnit(initUnit);
         returnNum = convertHandler.getReturnNum(
@@ -39,6 +39,7 @@ module.exports = function (app) {
           returnUnit,
           returnString
         );
+      // in case either initUnit or initNum are not entered correctly
       } else if (!initUnit && !initNum) {
         returnString = 'invalid number and unit'
         returnJson = "invalid number and unit"
@@ -49,7 +50,7 @@ module.exports = function (app) {
         returnString = 'invalid number'
         returnJson = "invalid number"
       }
-      //Send JSON
+      //Send process
       console.log('this is returnString >> ' + returnString)
       res.send(returnJson)
     })

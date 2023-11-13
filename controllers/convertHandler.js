@@ -5,19 +5,20 @@ function ConvertHandler() {
 
   this.getNum = function (input) {
     const regNum = /^^((\d+(\.\d+)?)(\/(\d+(\.\d+)?))?)(([a-z]+)?)$|^(\w+)$/gi
+    // using exec method so that I can use group function of exec
     const numArray = regNum.exec(input);
     if (!numArray) {
       num = false;
-    } else if (numArray[9]) {
+    } else if (numArray[9]) { //group 9 is only when character(\w) was input
       num = 1;
-    } else if (numArray[4]) {
-      num = numArray[2] / numArray[5]
-    } else if (numArray[1]) {
+    } else if (numArray[4]) { //group 4 is denominator including /
+      num = numArray[2] / numArray[5] // group 2 is numelator group 5 is just denominator
+    } else if (numArray[1]) { // group 1 is for when number not including / is entered
       num = numArray[1]
     } else {
       num = false;
     }
-
+    // inserting value to result
     let result;
     if (num) {
       result = parseFloat(num);
@@ -32,14 +33,14 @@ function ConvertHandler() {
     const unitArray = reg.exec(input);
     if (!unitArray) {
       unit = input;
-    } else if (unitArray[8]) {
+    } else if (unitArray[8]) { // group 8 is for string coming after number
       unit = unitArray[8];
-    } else if (unitArray[9]) {
+    } else if (unitArray[9]) { // group 9 is for stirng only
       unit = unitArray[9];
     } else {
       unit = false;
     }
-
+    // inserting value to result
     let result;
     const regOnlyUnit = /^((gal|km|mi|kg|lbs)|(l))$/gi;
     const regOnlyUnit2 = /((gal|km|mi|kg|lbs)|(l))$/gi;
@@ -48,6 +49,8 @@ function ConvertHandler() {
     if (!regedInput) {
       result = false;
       if (regedInput2) {
+        //this is for my executional contidion and regex for pass of FCC test
+        //in order to tell last letter is matched with one of unit 
         result = regedInput2[1];
       }
     } else if (regedInput[3]) {
