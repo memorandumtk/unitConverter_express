@@ -43,7 +43,8 @@ app.use(function (req, res, next) {
     .send('Not Found');
 });
 
-const port = process.env.PORT || 3000;
+const port = 3000;
+// const port = process.env.PORT || 3000;
 
 //Start our server and tests!
 app.listen(port, function () {

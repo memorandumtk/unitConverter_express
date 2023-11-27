@@ -1,6 +1,5 @@
 'use strict';
 const expect = require('chai').expect;
-const { default: next } = require('next');
 const ConvertHandler = require('../controllers/convertHandler.js');
 const { query } = require('express');
 
